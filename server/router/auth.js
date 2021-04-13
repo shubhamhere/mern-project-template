@@ -118,6 +118,45 @@ router.post('/register', async (req, res) => {
    //About us page
 
    router.get('/about',authenticate,(req,res)=>{
+      // console.log(`hello about`);
+      
       res.send(req.rootUser); //as req.rootuser contains all data of user logged in
    });
+
+   //get user data for contact us and home page
+   router.get('/getdata',authenticate,(req,res)=>{
+      console.log(`hello contact and home`);
+      
+      res.send(req.rootUser); //as req.rootuser contains all data of user logged in
+   });
+
+//contact us ka page
+router.post('/contact',authenticate, async (req,res)=>{
+      try {
+         const {name,email,phone,message}=req.body
+
+         if ( !name || !email || !phone || !message) {
+            console.log(`please fill the complete form `);
+            alert('please fill the complete form')
+            return res.json({error:"please fill the complete form "})
+         }
+ 
+         const userContact = await User.findOne({_id:req.userID})
+
+          if (userContact) {
+             const userMessage = await userContact.addMessage(name, email , phone, message)
+
+             await userContact.save()
+
+             res.status(201).json({message:"user message saved sucessfully"})
+          }
+
+      } catch (error) {
+         console.log(error);
+         
+      }
+   
+});
+
+
    module.exports = router;
