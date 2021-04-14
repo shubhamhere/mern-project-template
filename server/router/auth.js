@@ -125,7 +125,7 @@ router.post('/register', async (req, res) => {
 
    //get user data for contact us and home page
    router.get('/getdata',authenticate,(req,res)=>{
-      console.log(`hello contact and home`);
+      // console.log(`hello contact and home`);
       
       res.send(req.rootUser); //as req.rootuser contains all data of user logged in
    });
@@ -157,6 +157,12 @@ router.post('/contact',authenticate, async (req,res)=>{
       }
    
 });
+ //Logout us page
 
+ router.get('/logout',(req,res)=>{
+   console.log(`hello logout `);
+   res.clearCookie('jwtoken',{path:'/'})
+   res.status(200).send('User logout'); 
+});
 
    module.exports = router;
